@@ -39,4 +39,10 @@ php artisan serve --host 0.0.0.0 --port 9000
 
 12. buka browser  http://localhost:9000
 
+13. jika ingin melakukan penambahan besar  upload data pada php.ini 
+dapat melakukan 
+ buat file cat data-php\local.ini
+lalu edit dan tambahkan berikut
+upload_max_filesize=40M
+post_max_size=40M
 
