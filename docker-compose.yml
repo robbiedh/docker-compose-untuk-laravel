@@ -1,0 +1,51 @@
+version: '3.1'
+services:
+  #PHP Service
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: php
+    container_name: php_edc
+    ports:
+      - "9000:9000"
+    tty: true
+    working_dir: /var/www
+    volumes:
+      - ./data-workspace:/var/www
+      - ./data-php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks: 
+      - edc-develop
+
+  #MySQL Service
+  mysql:
+    image: 'mysql:5.6'
+    container_name: mysql_edc
+    networks:
+      - edc-develop
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: laravel_docker
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./data-mysql:/var/lib/mysql
+      - ./config-mysql/my.cnf:/etc/mysql/my.cnf
+  #phpmyadmin 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin_edc
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql_edc
+      MYSQL_USER: root
+    networks:
+      - edc-develop
+#Docker Networks
+networks:
+  edc-develop:
+    driver: bridge
